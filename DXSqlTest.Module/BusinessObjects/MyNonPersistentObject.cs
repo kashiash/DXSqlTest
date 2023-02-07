@@ -7,42 +7,32 @@ using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.DC;
 using DevExpress.ExpressApp.Xpo;
 using DevExpress.Persistent.Base;
-using DevExpress.Xpo;
 using DevExpress.Xpo.DB;
-using DXSqlTest.Module.BusinessObjects;
+using DevExpress.Xpo;
 
-namespace DXSqltest.Module.BusinessObjects
+namespace DXSqlTest.Module.BusinessObjects
 {
-  
-
-
     [DomainComponent, DefaultClassOptions]
-
-    public class ResultClass
+    public class MyNonPersistentObject
     {
         [DevExpress.ExpressApp.Data.Key]
-        public Guid Oid { get; set; }
-
-
-        public string City { get; set; }
-
-
-        public int Licznik { get; set; }
-
+        public Guid Oid { get; internal set; }
+        public string CustomerName { get; internal set; }
+        public string City { get; internal set; }
+        public string Street { get; internal set; }
     }
 
-
-    class ResultClassAdapter
+    class MyNonPersistentObjectAdapter
     {
         NonPersistentObjectSpace objectSpace;
-        public ResultClassAdapter(NonPersistentObjectSpace npos)
+        public MyNonPersistentObjectAdapter(NonPersistentObjectSpace npos)
         {
             objectSpace = npos;
             objectSpace.ObjectsGetting += Npos_ObjectsGetting;
         }
         private void Npos_ObjectsGetting(object sender, ObjectsGettingEventArgs e)
         {
-            if (e.ObjectType != typeof(ResultClass))
+            if (e.ObjectType != typeof(MyNonPersistentObject))
             {
                 return;
             }
@@ -52,35 +42,34 @@ namespace DXSqltest.Module.BusinessObjects
         }
         private void DynamicCollection_FetchObjects(object sender, FetchObjectsEventArgs e)
         {
-            if (e.ObjectType == typeof(ResultClass))
+            if (e.ObjectType == typeof(MyNonPersistentObject))
             {
                 e.Objects = GetDataFromSproc();
                 e.ShapeData = true;
             }
         }
-        List<ResultClass> GetDataFromSproc()
+        List<MyNonPersistentObject> GetDataFromSproc()
         {
             XPObjectSpace persistentObjectSpace = objectSpace.AdditionalObjectSpaces.OfType<XPObjectSpace>().First();
             Session session = persistentObjectSpace.Session;
-            SelectedData results = session.ExecuteQueryWithMetadata("select newid() Oid ,City, count(*) Licznik from Customer group by City ");
+            SelectedData results = session.ExecuteQueryWithMetadata("select Oid,CustomerName,City,Street from Customer");
             Dictionary<string, int> columnNames = new Dictionary<string, int>();
             for (int columnIndex = 0; columnIndex < results.ResultSet[0].Rows.Length; columnIndex++)
             {
                 string columnName = results.ResultSet[0].Rows[columnIndex].Values[0] as string;
                 columnNames.Add(columnName, columnIndex);
             }
-            List<ResultClass> objects = new List<ResultClass>();
+            List<MyNonPersistentObject> objects = new List<MyNonPersistentObject>();
             foreach (SelectStatementResultRow row in results.ResultSet[1].Rows)
             {
-                ResultClass obj = new ResultClass();
+                MyNonPersistentObject obj = new MyNonPersistentObject();
                 obj.Oid = (Guid)row.Values[columnNames["Oid"]];
+                obj.CustomerName = row.Values[columnNames["CustomerName"]] as string;
                 obj.City = row.Values[columnNames["City"]] as string;
-                obj.Licznik = (int)row.Values[columnNames["Licznik"]] ;
-            
+                obj.Street = row.Values[columnNames["Street"]] as string;
                 objects.Add(obj);
             }
             return objects;
         }
     }
-
 }

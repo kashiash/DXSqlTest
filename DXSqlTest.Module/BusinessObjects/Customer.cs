@@ -47,6 +47,7 @@ namespace GetRecordsFromSqlTest.Module.BusinessObjects
 		}
 		[Size(SizeAttribute.DefaultStringMappingFieldSize)]
 		public string Street
+
 		{
 
 			get => adres;

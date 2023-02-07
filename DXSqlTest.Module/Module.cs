@@ -13,6 +13,8 @@ using DevExpress.ExpressApp.Model.NodeGenerators;
 using DevExpress.Xpo;
 using DevExpress.ExpressApp.Xpo;
 using GetRecordsFromSqlTest.Module.BusinessObjects;
+using DXSqlTest.Module.BusinessObjects;
+using DXSqltest.Module.BusinessObjects;
 
 namespace DXSqlTest.Module;
 
@@ -47,7 +49,28 @@ public sealed class DXSqlTestModule : ModuleBase {
     public override void Setup(XafApplication application) {
         base.Setup(application);
         // Manage various aspects of the application UI and behavior at the module level.
+        application.SetupComplete += Application_SetupComplete;
     }
+
+    private void Application_SetupComplete(object sender, EventArgs e)
+    {
+        Application.ObjectSpaceCreated += Application_ObjectSpaceCreated;
+    }
+    private void Application_ObjectSpaceCreated(object sender, ObjectSpaceCreatedEventArgs e)
+    {
+        CompositeObjectSpace os = e.ObjectSpace as CompositeObjectSpace;
+        if (os != null && !(os.Owner is CompositeObjectSpace))
+        {
+            os.PopulateAdditionalObjectSpaces((XafApplication)sender);
+        }
+        NonPersistentObjectSpace npos = e.ObjectSpace as NonPersistentObjectSpace;
+        if (npos != null)
+        {
+            new MyNonPersistentObjectAdapter(npos);
+            new ResultClassAdapter(npos);
+        }
+    }
+
     public override void CustomizeTypesInfo(ITypesInfo typesInfo) {
         base.CustomizeTypesInfo(typesInfo);
         CalculatedPersistentAliasHelper.CustomizeTypesInfo(typesInfo);
