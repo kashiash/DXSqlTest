@@ -58,6 +58,8 @@ namespace UnboundListView.Module {
             XPObjectSpace persistentObjectSpace = (XPObjectSpace)ObjectSpace;
             Session session = persistentObjectSpace.Session;
             SelectedData results = session.ExecuteQueryWithMetadata("select newid() Oid ,City, count(*) Licznik from Customer group by City ");
+
+      
             Dictionary<string, int> columnNames = new Dictionary<string, int>();
             for (int columnIndex = 0; columnIndex < results.ResultSet[0].Rows.Length; columnIndex++)
             {

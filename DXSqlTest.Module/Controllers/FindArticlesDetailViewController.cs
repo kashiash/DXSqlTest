@@ -11,84 +11,59 @@ using System.Text;
 using System.Threading.Tasks;
 using DevExpress.ExpressApp.Actions;
 using DevExpress.Persistent.Base;
+using GetRecordsFromSqlTest.Module.BusinessObjects;
+using DXSqlTest.Module.BusinessObjects;
 
 namespace DXSqlTest.Module.Controllers
 {
-    public class FindArticlesDetailViewController : ViewController<DetailView>
+    public class FindCitiesDetailViewController : ViewController<DetailView>
     {
         SimpleAction fillDataAction;
-        public FindArticlesDetailViewController() : base()
+        public FindCitiesDetailViewController() : base()
         {
             // Target required Views (use the TargetXXX properties) and create their Actions.
             TargetObjectType = typeof(FindArticlesDialog);
 
-            fillDataAction = new SimpleAction(this, $"{GetType().FullName}{nameof(fillDataAction)}", PredefinedCategory.Unspecified)
+            fillDataAction = new SimpleAction(this, $"{GetType().FullName}{nameof(fillDataAction)}", PredefinedCategory.Filters)
             {
-                Caption = "Find articles"
+                Caption = "Load data"
             };
             fillDataAction.Execute += fillDataAction_Execute;
         }
 
         private void fillDataAction_Execute(object sender, SimpleActionExecuteEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnActivated()
-        {
-            base.OnActivated();
-            // Perform various tasks depending on the target View.
-        }
-        protected override void OnDeactivated()
-        {
-            // Unsubscribe from previously subscribed events and release other references and resources.
-            base.OnDeactivated();
-        }
-        protected override void OnViewControlsCreated()
-        {
-            base.OnViewControlsCreated();
-            // Access and customize the target View control.
-            NonPersistentObjectSpace objectSpace = (NonPersistentObjectSpace)Application.CreateObjectSpace(typeof(FindArticlesDialog));
-            objectSpace.ObjectsGetting += ObjectSpace_ObjectsGetting;
+           var currentObject = View.CurrentObject as FindArticlesDialog;
+           XPObjectSpace persistentObjectSpace = (XPObjectSpace)Application.CreateObjectSpace(typeof(Customer));
+           Session session = persistentObjectSpace.Session;
+           currentObject.LoadData(session);
         }
 
 
-        private void ObjectSpace_ObjectsGetting(object sender, ObjectsGettingEventArgs e)
-        {
-            NonPersistentObjectSpace objectSpace = (NonPersistentObjectSpace)sender;
-            var collection = new DynamicCollection(objectSpace, e.ObjectType, e.Criteria, e.Sorting, e.InTransaction);
-            collection.FetchObjects += DynamicCollection_FetchObjects;
-            e.Objects = collection;
-        }
-        private void DynamicCollection_FetchObjects(object sender, FetchObjectsEventArgs e)
+
+  private void  GetDataFromSproc()
         {
 
-            e.Objects = GetDataFromSproc();
-            e.ShapeData = true;
-        }
 
-        List<ResultClass> GetDataFromSproc()
-        {
-            XPObjectSpace persistentObjectSpace = (XPObjectSpace)ObjectSpace;
-            Session session = persistentObjectSpace.Session;
-            SelectedData results = session.ExecuteQueryWithMetadata("select newid() Oid ,City, count(*) Licznik from Customer group by City ");
-            Dictionary<string, int> columnNames = new Dictionary<string, int>();
-            for (int columnIndex = 0; columnIndex < results.ResultSet[0].Rows.Length; columnIndex++)
-            {
-                string columnName = results.ResultSet[0].Rows[columnIndex].Values[0] as string;
-                columnNames.Add(columnName, columnIndex);
-            }
-            List<ResultClass> objects = new List<ResultClass>();
-            foreach (SelectStatementResultRow row in results.ResultSet[1].Rows)
-            {
-                ResultClass obj = new ResultClass();
-                obj.Oid = (Guid)row.Values[columnNames["Oid"]];
-                obj.City = row.Values[columnNames["City"]] as string;
-                obj.Licznik = (int)row.Values[columnNames["Licznik"]];
 
-                objects.Add(obj);
-            }
-            return objects;
+            //SelectedData results = session.ExecuteQueryWithMetadata(query);
+            //Dictionary<string, int> columnNames = new Dictionary<string, int>();
+            //for (int columnIndex = 0; columnIndex < results.ResultSet[0].Rows.Length; columnIndex++)
+            //{
+            //    string columnName = results.ResultSet[0].Rows[columnIndex].Values[0] as string;
+            //    columnNames.Add(columnName, columnIndex);
+            //}
+         
+            //foreach (SelectStatementResultRow row in results.ResultSet[1].Rows)
+            //{
+            //    ResultClassSecond obj = new ResultClassSecond();
+            //    obj.Oid = (Guid)row.Values[columnNames["Oid"]];
+            //    obj.City = row.Values[columnNames["City"]] as string;
+            //    obj.Licznik = (int)row.Values[columnNames["Licznik"]];
+
+            //    currentObject.Results.Add(obj);
+            //}
+      
         }
 
     }

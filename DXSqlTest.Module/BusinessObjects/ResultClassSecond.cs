@@ -16,7 +16,7 @@ namespace DXSqltest.Module.BusinessObjects
   
 
 
-    [DomainComponent, DefaultClassOptions]
+    [DomainComponent,NonPersistent]
 
     public class ResultClassSecond
     {
@@ -32,6 +32,20 @@ namespace DXSqltest.Module.BusinessObjects
     }
 
 
- 
+    [DomainComponent,NonPersistent]
+
+    public class ResultClassThird
+    {
+        [DevExpress.ExpressApp.Data.Key]
+        public Guid Oid { get; set; }
+
+
+        public string City { get; set; }
+
+
+        public int Licznik { get; set; }
+
+    }
+
 
 }

@@ -13,6 +13,8 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
+using GetRecordsFromSqlTest.Module.BusinessObjects;
 
 namespace DXSqlTest.Module.Controllers
 {
@@ -27,7 +29,7 @@ namespace DXSqlTest.Module.Controllers
             
 
 
-            action = new PopupWindowShowAction(this, "FindArticles", PredefinedCategory.View);
+            action = new PopupWindowShowAction(this, "Find Cities", PredefinedCategory.View);
             action.CustomizePopupWindowParams += Action_CustomizePopupWindowParams;
             action.Execute += Action_Execute;
         }
@@ -50,59 +52,5 @@ namespace DXSqlTest.Module.Controllers
 
     }
 
-    [DomainComponent]
-    public class FindArticlesDialog : BoundNonPersistentObjectBase
-    {
-        private String _Author;
-        [ImmediatePostData]
-        public String Author
-        {
-            get { return _Author; }
-            set { SetPropertyValue<String>(nameof(Author), ref _Author, value); }
-        }
-        private float _AuthorMinRating;
-        [Appearance("", Enabled = false, Criteria = "Author is not null")]
-        public float AuthorMinRating
-        {
-            get { return _AuthorMinRating; }
-            set { SetPropertyValue<float>(nameof(AuthorMinRating), ref _AuthorMinRating, value); }
-        }
-        private BindingList<ResultClassSecond> results;
-        public BindingList<ResultClassSecond> Results
-        {
-            get
-            {
-                if (results == null)
-                {
-                    results = new BindingList<ResultClassSecond>();
-                }
-                return results;
-            }
-        }
-        private void UpdateResults()
-        {
-            if (results != null)
-            {
-                
-                results.RaiseListChangedEvents = false;
-                results.Clear();
-                //foreach (var obj in ObjectSpace.GetObjects<Article>(filter))
-                //{
-                //    results.Add(obj);
-                //}
-                results.RaiseListChangedEvents = true;
-                results.ResetBindings();
-                OnPropertyChanged(nameof(Results));
-            }
-        }
 
-        [Action(PredefinedCategory.Filters)]
-        public void Find()
-        {
-            UpdateResults();
-        }
-
-
-
-    }
 }
