@@ -3,7 +3,10 @@ using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Actions;
 using DevExpress.ExpressApp.ConditionalAppearance;
 using DevExpress.ExpressApp.DC;
+using DevExpress.ExpressApp.Xpo;
 using DevExpress.Persistent.Base;
+using DevExpress.Xpo.DB;
+using DevExpress.Xpo;
 using DXSqltest.Module.BusinessObjects;
 using DXSqlTest.Module.BusinessObjects;
 using System;
@@ -32,6 +35,23 @@ namespace DXSqlTest.Module.Controllers
         private void Action_Execute(object sender, PopupWindowShowActionExecuteEventArgs e)
         {
         }
+
+        //private void ObjectSpace_ObjectsGetting(object sender, ObjectsGettingEventArgs e)
+        //{
+        //    NonPersistentObjectSpace objectSpace = (NonPersistentObjectSpace)sender;
+        //    var collection = new DynamicCollection(objectSpace, e.ObjectType, e.Criteria, e.Sorting, e.InTransaction);
+        //    collection.FetchObjects += DynamicCollection_FetchObjects;
+        //    e.Objects = collection;
+        //}
+        //private void DynamicCollection_FetchObjects(object sender, FetchObjectsEventArgs e)
+        //{
+
+        //    e.Objects = GetDataFromSproc();
+        //    e.ShapeData = true;
+        //}
+
+
+
     }
 
     [DomainComponent]
@@ -85,5 +105,8 @@ namespace DXSqlTest.Module.Controllers
         {
             UpdateResults();
         }
+
+
+
     }
 }

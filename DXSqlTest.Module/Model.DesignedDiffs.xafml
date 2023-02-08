@@ -1,8 +1,36 @@
-﻿<?xml version="1.0" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Application Title="DXSqlTest">
   <Options>
     <LayoutManagerOptions RequiredFieldMark="*" />
   </Options>
+  <SchemaModules>
+    <SchemaModule Name="CloneObjectModule" Version="22.1.6.0" IsNewNode="True" />
+    <SchemaModule Name="SchedulerModuleBase" Version="22.1.6.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="22.1.6.0" IsNewNode="True" />
+  </SchemaModules>
   <Views>
+    <DetailView Id="FindArticlesDialog_DetailView">
+      <Items>
+        <ActionContainerViewItem Id="FilteringContainer" ActionContainer="Filters" Caption="FilteringContainer(8)" IsNewNode="True" />
+      </Items>
+      <Layout>
+        <LayoutGroup Id="Main" RelativeSize="100">
+          <LayoutGroup Id="SimpleEditors" RelativeSize="9.53125">
+            <LayoutGroup Id="FindArticlesDialog" Caption="FindArticlesDialog" RelativeSize="100" Direction="Horizontal">
+              <LayoutGroup Id="Auto22d513ee-3db0-4732-8749-89a53cc8ada4" ShowCaption="False" Caption="" Index="0" RelativeSize="60.35411855273287" IsNewNode="True">
+                <LayoutItem Id="Author" ViewItem="Author" Index="0" RelativeSize="51.63934426229508" IsNewNode="True" />
+                <LayoutItem Id="AuthorMinRating" ViewItem="AuthorMinRating" Index="1" RelativeSize="48.36065573770492" IsNewNode="True" />
+              </LayoutGroup>
+              <LayoutItem Id="FilteringContainer" ViewItem="FilteringContainer" Index="1" RelativeSize="39.64588144726713" IsNewNode="True" />
+              <LayoutItem Id="Author" RelativeSize="50" Removed="True" />
+              <LayoutItem Id="AuthorMinRating" Removed="True" />
+            </LayoutGroup>
+          </LayoutGroup>
+          <LayoutGroup Id="Results_Group" Direction="Vertical" RelativeSize="90.46875">
+            <LayoutItem Id="Results" RelativeSize="100" />
+          </LayoutGroup>
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
   </Views>
 </Application>
