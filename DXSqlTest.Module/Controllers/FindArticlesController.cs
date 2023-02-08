@@ -12,17 +12,28 @@ using DXSqlTest.Module.BusinessObjects;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Collections;
 
 namespace DXSqlTest.Module.Controllers
 {
     public class FindArticlesController : ViewController
     {
+
         private PopupWindowShowAction action;
+       
         public FindArticlesController()
         {
+
+            
+
+
             action = new PopupWindowShowAction(this, "FindArticles", PredefinedCategory.View);
             action.CustomizePopupWindowParams += Action_CustomizePopupWindowParams;
             action.Execute += Action_Execute;
+        }
+        private void fillDataAction_Execute(object sender, SimpleActionExecuteEventArgs e)
+        {
+            // Execute your business logic (https://docs.devexpress.com/eXpressAppFramework/112737/).
         }
         private void Action_CustomizePopupWindowParams(object sender, CustomizePopupWindowParamsEventArgs e)
         {
@@ -32,25 +43,10 @@ namespace DXSqlTest.Module.Controllers
             detailView.ViewEditMode = DevExpress.ExpressApp.Editors.ViewEditMode.Edit;
             e.View = detailView;
         }
+
         private void Action_Execute(object sender, PopupWindowShowActionExecuteEventArgs e)
         {
         }
-
-        //private void ObjectSpace_ObjectsGetting(object sender, ObjectsGettingEventArgs e)
-        //{
-        //    NonPersistentObjectSpace objectSpace = (NonPersistentObjectSpace)sender;
-        //    var collection = new DynamicCollection(objectSpace, e.ObjectType, e.Criteria, e.Sorting, e.InTransaction);
-        //    collection.FetchObjects += DynamicCollection_FetchObjects;
-        //    e.Objects = collection;
-        //}
-        //private void DynamicCollection_FetchObjects(object sender, FetchObjectsEventArgs e)
-        //{
-
-        //    e.Objects = GetDataFromSproc();
-        //    e.ShapeData = true;
-        //}
-
-
 
     }
 
